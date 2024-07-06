@@ -5,7 +5,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <Header />
-      <main className="flex-auto">{children}</main>
+      <main className="flex-auto">{children}</main> 
+      
       <Footer />
     </>
   )
