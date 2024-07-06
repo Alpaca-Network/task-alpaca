@@ -24,7 +24,7 @@ contract Task {
     address private criticLLMAddress;
 
     modifier ownerOnly() {
-        require(msg.sender == bestAgentOwner, "Only the owner of the Task can call this function");
+        require(msg.sender == owner, "Only the owner of the Task can call this function");
         _;
     }
 
