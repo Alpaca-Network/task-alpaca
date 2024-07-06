@@ -9,11 +9,12 @@ contract Task {
 
     public string description;
     public uint256 incentive;
+    public uint256 remainingIncentive;
     public uint256 incentiveBlocksDuration;
+    public bool incentivesFullyPaid;
     public string[] testCases;
     public uint256 pricePerExecution;
-
-    
+    public uint256 creationBlock;
 
     address private criticLLMAddress;
 
@@ -25,6 +26,8 @@ contract Task {
         incentive = _incentive;
         incentiveBlocksDuration = _incentiveBlocksDuration;
         reward = msg.value;
+        creationBlock = block.number;
+        incentivesFullyPaid = false;
     }
 
     function evaluateAgent(address agent) public {
@@ -44,7 +47,14 @@ contract Task {
     }
 
     function calculatePayout() public {
-        return incentive / incentiveBlocksDuration;
+        if (block.number - creationBlock > incentiveBlocksDuration) {
+            incentivesFullyPaid = true;
+            return remainingIncentive;
+        }
+        else{
+            uint blocksPassed = block.number - submissionBlock;
+            return incentive * (blocksPassed/incentiveBlocksDuration);
+        }
     }
 
     function submitAgent(address _agent, address _owner) public {
@@ -60,11 +70,13 @@ contract Task {
             submissionBlock = block.number;
         } 
         else if (score > bestScore) {
-            // Pay the previous best agent
-            uint rewardForPreviousBest = calculatePayout();
-            incentive -= rewardForPreviousBest;
-            bestAgentOwner.transfer(rewardForPreviousBest);
-
+            if (!incentivesFullyPaid) {
+                // Pay the previous best agent
+                uint rewardForPreviousBest = calculatePayout();
+                remainingIncentive -= rewardForPreviousBest;
+                bestAgentOwner.transfer(rewardForPreviousBest);
+            }
+            
             // Set the new best agent
             bestAgent = _agent;
             bestScore = score;
@@ -74,6 +86,7 @@ contract Task {
     }
 
     function useAgent(string memory additionalInstructions) public payable{
+        // TODO: think about how to ensure that the agent responds to the task
         require(msg.value == price, "Incorrect payment amount sent");
         return bestAgent.sendMessage(string.concat(
             "This is your task: ",
@@ -81,10 +94,6 @@ contract Task {
             "\nThese are additional instructions and constraints you must obey:"
             additionalInstructions
         ));
-
-
-        // Use the best agent to complete the task
-        //get payment
     }
 
     function parseString(string memory _input) public pure returns(uint) {
