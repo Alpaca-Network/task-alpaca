@@ -2,12 +2,12 @@
 pragma solidity ^0.8.13;
 
 contract Task {
-    public address bestAgent;
-    public address bestScore;
+    address public bestAgent;
+    address public bestScore;
 
-    public string description;
-    public uint256 reward;
-    public string[] testCases;
+    string public description;
+    uint256 public reward;
+    string[] public testCases;
 
     address private criticLLMAddress;
 
@@ -18,7 +18,7 @@ contract Task {
         reward = msg.value;
     }
 
-    function evaluateAgent(address agent) public {
+    function evaluateAgent(address agent) public returns(uint256) {
         string agentOutput = agent.sendMessage(string.concat(
             "Complete the following task: ",
             description
