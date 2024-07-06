@@ -15,7 +15,11 @@ contract Registry {
     uint _pricePerExecution,
     uint256 _incentiveBlocksDuration
   ) public payable {
-    Task task = new Task(_description, _pricePerExecution, _incentiveBlocksDuration);
+    Task task = new Task(
+      _description,
+      _pricePerExecution,
+      _incentiveBlocksDuration
+    );
     registry.push(task);
   }
 
@@ -26,5 +30,4 @@ contract Registry {
   function getRegistry() public view returns (Task[] memory) {
     return registry;
   }
-
 }
