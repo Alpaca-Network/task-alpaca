@@ -30,7 +30,7 @@ contract Task {
         incentivesFullyPaid = false;
     }
 
-    function evaluateAgent(address agent) public {
+    function evaluateAgent(address agent) public returns(uint256) {
         string agentOutput = agent.sendMessage(string.concat(
             "Complete the following task: ",
             description

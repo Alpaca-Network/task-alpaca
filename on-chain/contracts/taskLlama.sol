@@ -54,7 +54,8 @@ contract TaskLlama {
   struct Agent {
     address agentAddress;
     address ownerAddress;
-    mapping(Category => Task[]) categoryTasks; // Use mapping for tasks by category
+    // <task_addr, task>
+    mapping(address => Task[]) categoryTasks; // Use mapping for tasks by category
   }
 
   Task[] public tasks;
