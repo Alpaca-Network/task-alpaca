@@ -41,7 +41,7 @@ contract Task {
         incentivesFullyPaid = false;
     }
 
-    function setCriticAddress(address _criticLLMAddress) public OwnerOnly{
+    function setCriticAddress(address _criticLLMAddress) public ownerOnly{
         criticLLMAddress = _criticLLMAddress;
     }
 
