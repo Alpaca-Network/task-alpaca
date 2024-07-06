@@ -8,17 +8,23 @@ pragma solidity ^0.8.13;
 
 import './Task.sol';
 contract Registry {
-  // IOracle.Content[] public contents;
-  // Task[] public registry;
+  Task[] public registry;
 
-  // function createTask(
-  //   string memory _description,
-  //   address _criticLLMAddress,
-  //   uint _pricePerExecution,
-  //   uint256 _incentiveBlocksDuration
-  // ) public payable {
-  //   Task task = new Task(_description, _criticLLMAddress, _pricePerExecution, _incentiveBlocksDuration);
-  //   registry.push(task);
-  // }
+  function createTask(
+    string memory _description,
+    uint _pricePerExecution,
+    uint256 _incentiveBlocksDuration
+  ) public payable {
+    Task task = new Task(_description, _pricePerExecution, _incentiveBlocksDuration);
+    registry.push(task);
+  }
+
+  function getTask(uint index) public view returns (Task) {
+    return registry[index];
+  }
+
+  function getRegistry() public view returns (Task[] memory) {
+    return registry;
+  }
 
 }

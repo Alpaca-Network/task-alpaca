@@ -24,9 +24,9 @@ export default <HardhatUserConfig>{
   },
   networks: {
     galadriel: {
-        chainId: 696969,
-        url: "https://devnet.galadriel.com/",
-        accounts: galadrielDevnet,
-      },
+      chainId: 696969,
+      url: "https://devnet.galadriel.com/",
+      accounts: galadrielDevnet,
+    },
   },
 };
