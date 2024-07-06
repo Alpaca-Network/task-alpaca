@@ -6,9 +6,9 @@ import dotenv from 'dotenv';
 // Load environment variables from the .env file
 dotenv.config();
 
-const galadrielDevnet = []
+const galadrielDevnet = [];
 if (process.env.PRIVATE_KEY_GALADRIEL) {
-  galadrielDevnet.push(process.env.PRIVATE_KEY_GALADRIEL)
+  galadrielDevnet.push(process.env.PRIVATE_KEY_GALADRIEL);
 }
 
 export default <HardhatUserConfig>{
@@ -25,7 +25,7 @@ export default <HardhatUserConfig>{
   networks: {
     galadriel: {
       chainId: 696969,
-      url: "https://devnet.galadriel.com/",
+      url: 'https://devnet.galadriel.com/',
       accounts: galadrielDevnet,
     },
   },
