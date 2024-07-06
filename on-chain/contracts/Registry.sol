@@ -1,13 +1,14 @@
 // SPDX-License-Identifier: MIT
-/*
-    TODO:
-      - add description
-      - add comments
-*/
-pragma solidity ^0.8.13;
+pragma solidity ^0.8.0;
 
-import './Task.sol';
-contract Registry {
+contract TaskRegistry {
+    struct Task {
+        string description;
+        address agent;
+        address evaluator;
+        uint256 reward;
+    }
+
     Task[] public tasks;
 
     event TaskCreated(uint256 taskId, string description, uint256 reward, address agent, address evaluator);
@@ -23,9 +24,10 @@ contract Registry {
         emit TaskCreated(tasks.length - 1, _description, _reward, _agent, _evaluator);
     }
 
-    function getTask(uint256 index) public view returns (Task memory) {
+    function getTask(uint256 index) public view returns (string memory, address, address, uint256) {
         require(index < tasks.length, "Task does not exist");
-        return tasks[index];
+        Task memory task = tasks[index];
+        return (task.description, task.agent, task.evaluator, task.reward);
     }
 
     function getRegistry() public view returns (Task[] memory) {
