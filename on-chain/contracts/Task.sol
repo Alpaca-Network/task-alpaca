@@ -8,6 +8,7 @@ interface Agent {
 }
 
 contract Task {
+    address public owner;
     address public bestAgent;
     uint256 public bestScore;
     address payable public bestAgentOwner;
@@ -24,15 +25,24 @@ contract Task {
 
     address private criticLLMAddress;
 
+    modifier ownerOnly() {
+        require(msg.sender == bestAgentOwner, "Only the owner of the Task can call this function");
+        _;
+        
+    }
 
-    constructor(string memory _description, address _critcLLMAddress, uint _pricePerExecution, uint256 _incentiveBlocksDuration) payable {
+    constructor(string memory _description, uint _pricePerExecution, uint256 _incentiveBlocksDuration) payable {
+        owner = msg.sender;
         description = _description;
-        criticLLMAddress = _critcLLMAddress;
         pricePerExecution = _pricePerExecution;
         incentiveBlocksDuration = _incentiveBlocksDuration;
         incentive = msg.value;
         creationBlock = block.number;
         incentivesFullyPaid = false;
+    }
+
+    function setCriticAddress(address _criticLLMAddress) public OwnerOnly{
+        criticLLMAddress = _criticLLMAddress;
     }
 
     function evaluateAgent(address agent) public view returns(uint256) {
