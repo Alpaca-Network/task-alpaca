@@ -1,38 +1,38 @@
-import {HardhatUserConfig} from "hardhat/config";
-import "@nomicfoundation/hardhat-toolbox";
-import "@xyrusworx/hardhat-solidity-json";
+import { HardhatUserConfig } from 'hardhat/config';
+import '@nomicfoundation/hardhat-toolbox';
+import '@xyrusworx/hardhat-solidity-json';
 import 'solidity-docgen';
-import "./tasks/whitelist";
-import "./tasks/deploy";
-import "./tasks/e2e";
-import "./tasks/functions";
+import './tasks/whitelist';
+import './tasks/deploy';
+import './tasks/e2e';
+import './tasks/functions';
 
-require('dotenv').config()
+require('dotenv').config();
 
-const galadrielDevnet = []
+const galadrielDevnet = [];
 if (process.env.PRIVATE_KEY_GALADRIEL) {
-  galadrielDevnet.push(process.env.PRIVATE_KEY_GALADRIEL)
+  galadrielDevnet.push(process.env.PRIVATE_KEY_GALADRIEL);
 }
-const localhostPrivateKeys = []
+const localhostPrivateKeys = [];
 if (process.env.PRIVATE_KEY_LOCALHOST) {
-  localhostPrivateKeys.push(process.env.PRIVATE_KEY_LOCALHOST)
+  localhostPrivateKeys.push(process.env.PRIVATE_KEY_LOCALHOST);
 }
 
 const config: HardhatUserConfig = {
   solidity: {
-    version: "0.8.20",
+    version: '0.8.20',
     settings: {
       optimizer: {
         enabled: true,
-        runs: 200
+        runs: 200,
       },
-      viaIR: true  // Enable the IR optimization to work around the "Stack too deep" error
-    }
+      viaIR: true, // Enable the IR optimization to work around the "Stack too deep" error
+    },
   },
   networks: {
     galadriel: {
       chainId: 696969,
-      url: "https://devnet.galadriel.com/",
+      url: 'https://devnet.galadriel.com/',
       accounts: galadrielDevnet,
     },
     hardhat: {
@@ -40,9 +40,9 @@ const config: HardhatUserConfig = {
     },
     localhost: {
       chainId: 1337,
-      url: "http://127.0.0.1:8545",
+      url: 'http://127.0.0.1:8545',
       accounts: localhostPrivateKeys,
-    }
+    },
   },
 };
 

@@ -1,52 +1,57 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-contract Task {
-    public address bestAgent;
-    public address bestScore;
-    public address bestAgentOwner;
-    public uint256 submissionBlock;
+import './agentLLM.sol';
 
-    public string description;
-    public uint256 incentive;
-    public uint256 remainingIncentive;
-    public uint256 incentiveBlocksDuration;
-    public bool incentivesFullyPaid;
-    public string[] testCases;
-    public uint256 pricePerExecution;
-    public uint256 creationBlock;
+interface Agent {
+    function sendMessage(string memory _message) external view returns(string memory);
+}
+
+contract Task {
+    address public bestAgent;
+    uint256 public bestScore;
+    address payable public bestAgentOwner;
+    uint256 public submissionBlock;
+
+    string public description;
+    uint256 public incentive;
+    uint256 public remainingIncentive;
+    uint256 public incentiveBlocksDuration;
+    bool public incentivesFullyPaid;
+    string[] public testCases;
+    uint256 public pricePerExecution;
+    uint256 public creationBlock;
 
     address private criticLLMAddress;
 
 
-    constructor(string memory _description, address _critcLLMAddress, uint _incentive, uint _pricePerExecution, uint256 _incentiveBlocksDuration) payable {
+    constructor(string memory _description, address _critcLLMAddress, uint _pricePerExecution, uint256 _incentiveBlocksDuration) payable {
         description = _description;
         criticLLMAddress = _critcLLMAddress;
         pricePerExecution = _pricePerExecution;
-        incentive = _incentive;
         incentiveBlocksDuration = _incentiveBlocksDuration;
-        reward = msg.value;
+        incentive = msg.value;
         creationBlock = block.number;
         incentivesFullyPaid = false;
     }
 
-    function evaluateAgent(address agent) public returns(uint256) {
-        string agentOutput = agent.sendMessage(string.concat(
+    function evaluateAgent(address agent) public view returns(uint256) {
+        string memory agentOutput = Agent(agent).sendMessage(string.concat(
             "Complete the following task: ",
             description
         ));
 
-        string evaluationOutput = criticLLMAddress.sendMessage(string.concat(
+        string memory evaluationOutput = Agent(criticLLMAddress).sendMessage(string.concat(
             "Evaluate an agent's solution to the following task: ", 
             description,
             "\nReturn only a grade in the form of an integer between 0 and 100 where 0 represents a terrible output and 100 is perfect. This is the agent submission:",
             agentOutput
         ));
 
-        returns parseString(evaluationOutput);
+        return parseString(evaluationOutput);
     }
 
-    function calculatePayout() public {
+    function calculatePayout() private returns (uint256) {
         if (block.number - creationBlock > incentiveBlocksDuration) {
             incentivesFullyPaid = true;
             return remainingIncentive;
@@ -57,16 +62,16 @@ contract Task {
         }
     }
 
-    function submitAgent(address _agent, address _owner) public {
+    function submitAgent(address _agent, address _owner) public payable {
         
         // Submit the current agent for evaluation
-        uint 256 score = evaluateAgent(_agent);
+        uint256 score = evaluateAgent(_agent);
 
         // If no agent exists, set the current submission as the best
         if (bestAgent == address(0)) {
             bestAgent = _agent;
             bestScore = score;
-            bestAgentOwner = _owner;
+            bestAgentOwner = payable(_owner);
             submissionBlock = block.number;
         } 
         else if (score > bestScore) {
@@ -80,18 +85,18 @@ contract Task {
             // Set the new best agent
             bestAgent = _agent;
             bestScore = score;
-            bestAgentOwner = _owner;
+            bestAgentOwner = payable(_owner);
             submissionBlock = block.number;
         }
     }
 
-    function useAgent(string memory additionalInstructions) public payable{
+    function useAgent(string memory additionalInstructions) public payable returns (string memory){
         // TODO: think about how to ensure that the agent responds to the task
-        require(msg.value == price, "Incorrect payment amount sent");
-        return bestAgent.sendMessage(string.concat(
+        require(msg.value == pricePerExecution, "Incorrect payment amount sent");
+        return Agent(bestAgent).sendMessage(string.concat(
             "This is your task: ",
             description,
-            "\nThese are additional instructions and constraints you must obey:"
+            "\nThese are additional instructions and constraints you must obey:",
             additionalInstructions
         ));
     }

@@ -1,17 +1,15 @@
-import {ethers} from "hardhat";
-
+import { ethers } from 'hardhat';
 
 async function main() {
   if (!process.env.ORACLE_ADDRESS) {
-    throw new Error("ORACLE_ADDRESS env variable is not set.");
+    throw new Error('ORACLE_ADDRESS env variable is not set.');
   }
   const oracleAddress: string = process.env.ORACLE_ADDRESS;
   await deployQuickstart(oracleAddress);
 }
 
-
 async function deployQuickstart(oracleAddress: string) {
-  const agent = await ethers.deployContract("Quickstart", [oracleAddress], {});
+  const agent = await ethers.deployContract('Quickstart', [oracleAddress], {});
 
   await agent.waitForDeployment();
 

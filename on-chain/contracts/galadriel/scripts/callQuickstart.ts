@@ -1,16 +1,16 @@
 // Import ethers from Hardhat package
-import readline from "readline";
+import readline from 'readline';
 
-const {ethers} = require("hardhat");
+const { ethers } = require('hardhat');
 
 async function main() {
   const contractABI = [
-    "function initializeDalleCall(string memory message) public returns (uint)",
-    "function lastResponse() public view returns (string)"
+    'function initializeDalleCall(string memory message) public returns (uint)',
+    'function lastResponse() public view returns (string)',
   ];
 
   if (!process.env.QUICKSTART_CONTRACT_ADDRESS) {
-    throw new Error("QUICKSTART_CONTRACT_ADDRESS env variable is not set.");
+    throw new Error('QUICKSTART_CONTRACT_ADDRESS env variable is not set.');
   }
 
   const contractAddress = process.env.QUICKSTART_CONTRACT_ADDRESS;
@@ -25,7 +25,9 @@ async function main() {
   // Call the startChat function
   const transactionResponse = await contract.initializeDalleCall(message);
   const receipt = await transactionResponse.wait();
-  console.log(`Transaction sent, hash: ${receipt.hash}.\nExplorer: https://explorer.galadriel.com/tx/${receipt.hash}`)
+  console.log(
+    `Transaction sent, hash: ${receipt.hash}.\nExplorer: https://explorer.galadriel.com/tx/${receipt.hash}`
+  );
   console.log(`Image generation started with message: "${message}"`);
 
   // loop and sleep by 1000ms, and keep printing `lastResponse` in the contract.
@@ -33,38 +35,37 @@ async function main() {
   let newResponse = lastResponse;
 
   // print w/o newline
-  console.log("Waiting for response: ");
+  console.log('Waiting for response: ');
   while (newResponse === lastResponse) {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     newResponse = await contract.lastResponse();
-    console.log(".");
+    console.log('.');
   }
 
-  console.log(`Image generation completed, image URL: ${newResponse}`)
-
+  console.log(`Image generation completed, image URL: ${newResponse}`);
 }
 
 async function getUserInput(): Promise<string | undefined> {
   const rl = readline.createInterface({
     input: process.stdin,
-    output: process.stdout
-  })
+    output: process.stdout,
+  });
 
   const question = (query: string): Promise<string> => {
     return new Promise((resolve) => {
       rl.question(query, (answer) => {
-        resolve(answer)
-      })
-    })
-  }
+        resolve(answer);
+      });
+    });
+  };
 
   try {
-    const input = await question("Enter an image description: ")
-    rl.close()
-    return input
+    const input = await question('Enter an image description: ');
+    rl.close();
+    return input;
   } catch (err) {
-    console.error('Error getting user input:', err)
-    rl.close()
+    console.error('Error getting user input:', err);
+    rl.close();
   }
 }
 

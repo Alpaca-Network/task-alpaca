@@ -6,7 +6,6 @@ unless you wish to make any changes to the oracle, or run it locally for testing
 
 ## Deployment
 
-
 **Run local network if running locally**
 
 ```
