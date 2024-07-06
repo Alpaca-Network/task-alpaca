@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.13;
 
-import './agentLLM.sol';
+// import './agentLLM.sol';
 
 interface Agent {
     function sendMessage(string memory _message) external view returns(string memory);
@@ -41,7 +41,7 @@ contract Task {
         incentivesFullyPaid = false;
     }
 
-    function setCriticAddress(address _criticLLMAddress) public ownerOnly{
+    function setCriticAddress(address _criticLLMAddress) public ownerOnly {
         criticLLMAddress = _criticLLMAddress;
     }
 
