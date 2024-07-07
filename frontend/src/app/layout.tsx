@@ -76,7 +76,6 @@ export default function RootLayout({
     `}
       </Script>
 
-
       <body className="flex h-full flex-col">
         <WagmiProvider  config={config}>
           <QueryClientProvider client={queryClient}>
@@ -97,7 +96,6 @@ export default function RootLayout({
  
             </RainbowKitProvider>
           </QueryClientProvider>
-
         </WagmiProvider>
       </body>
     </html >

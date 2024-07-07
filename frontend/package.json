@@ -37,7 +37,7 @@
     "typescript": "^5.3.3",
     "use-debounce": "^10.0.0",
     "viem": "^2.9.6",
-    "wagmi": "^2.5.17"
+    "wagmi": "^2.10.9"
   },
   "devDependencies": {
     "eslint": "^8.56.0",
