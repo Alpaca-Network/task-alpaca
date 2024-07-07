@@ -69,8 +69,10 @@ export default function Bridge() {
     console.log(decimalAdjAmt, agentAddress, evaluatorAddress, description)
 
     try {
+      console.log(description)
       const tx = (await galGaladrielContract.createTask(description, agentAddress, evaluatorAddress, { value: decimalAdjAmt } )) as ethers.TransactionResponse
       console.log('trying')
+      
       let baseTxLink = "https://explorer.galadriel.com/tx/";
       setTxLink(`${baseTxLink}/${tx.hash}`)
     } catch (e) {
@@ -79,7 +81,7 @@ export default function Bridge() {
     } finally {
       setIsSending(false)
     }
-  }, [amount, signer, fromBalance]);
+  }, [amount, signer, description, fromBalance]);
 
   return (
     <TaskLayout
