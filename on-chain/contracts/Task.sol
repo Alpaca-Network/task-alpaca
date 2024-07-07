@@ -61,7 +61,7 @@ contract Task {
     );
   }
 
-  function respond(string memory _response) public {
+  function respond(string memory _response) external {
     response = _response;
     Agent(criticLLMAddress).startChat(
       string.concat(
@@ -73,7 +73,7 @@ contract Task {
     );
   }
 
-  function evalRespond(string memory _response) public {
+  function evalRespond(string memory _response) external {
     uint256 score = parseString(_response);
 
     // If no agent exists, set the current submission as the best
