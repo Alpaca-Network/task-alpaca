@@ -18,7 +18,7 @@
     "@types/node": ">=18.0.0",
     "@xyrusworx/hardhat-solidity-json": "^1.0.2",
     "chai": "^4.2.0",
-    "ethers": "^6.4.0",
+    "ethers": "^6.13.1",
     "hardhat": "^2.22.6",
     "hardhat-gas-reporter": "^1.0.8",
     "prettier": "^3.3.2",
