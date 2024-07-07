@@ -116,7 +116,14 @@ export function Header() {
               Log in
             </Button> */}
             <div className="flex space-x-8"> {/* Adjust spacing as needed */}
-              <Link href="/task" aria-label="Bridge" className="flex items-center">
+              <Link href="/task" aria-label="Task" className="flex items-center">
+                <span className="ml-2" >
+                  <p className="text-md text-gray-900 md:mt-0">
+                    Task
+                  </p>
+                </span> 
+              </Link>
+              <Link href="/leaderboard" aria-label="leaderboard" className="flex items-center">
                 <span className="ml-2" >
                   <p className="text-md text-gray-900 md:mt-0">
                     Task
