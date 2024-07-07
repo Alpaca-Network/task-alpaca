@@ -123,10 +123,10 @@ export function Header() {
                   </p>
                 </span> 
               </Link>
-              <Link href="/leaderboard" aria-label="leaderboard" className="flex items-center">
+              <Link href="/registry" aria-label="registry" className="flex items-center">
                 <span className="ml-2" >
                   <p className="text-md text-gray-900 md:mt-0">
-                    Task
+                    Registry
                   </p>
                 </span> 
               </Link>
