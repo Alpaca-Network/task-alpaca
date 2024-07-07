@@ -11,9 +11,9 @@ import ABI from '@/data/ABI.json'
 import { useEthersSigner } from "@/hooks/useEthersSigner";
 import { TaskLayout } from './TaskLayout'
 
-const galCA: string = "0x5faa989af96af85384b8a938c2ede4a7378d9875";
-const galGaladrielContract = new ethers.Contract(galCA, ABI);
-
+const galCA: string = "0x70819E5815f687B079eC6364fA5B8ac42e8986d6";
+const agentAddress: string = "0x0b95Eaf38E00ab26cB4bA6284726888CF2e5a0e1";
+const evaluatorAddress: string = "0x39E21bE0b4518baC9233705c43E59fb5224C9185"
 const TOKEN_DECIMALS = 18; // for both ETH and DEGEN
 
 const toastProps: ToastOptions = {
@@ -62,23 +62,24 @@ export default function Bridge() {
     }
     console.log('sending')
 
-    const decimalAdjAmt = ethers.formatUnits(balance.value, 18)
+    const decimalAdjAmt = ethers.parseUnits(amount.toString(), TOKEN_DECIMALS);
 
-    const galContract: any = galGaladrielContract;
+    const galGaladrielContract = new ethers.Contract(galCA, ABI, signer);
 
-    console.log(decimalAdjAmt)
-    console.log(galContract)
+    console.log(decimalAdjAmt, agentAddress, evaluatorAddress, description)
 
     try {
-      const tx = (await galContract.connect(signer).BridgeOut(decimalAdjAmt)) as ethers.TransactionResponse
-      let baseTxLink = "https://explorer.galadriel.com/";
+      const tx = (await galGaladrielContract.createTask(description, agentAddress, evaluatorAddress, { value: decimalAdjAmt } )) as ethers.TransactionResponse
+      console.log('trying')
+      let baseTxLink = "https://explorer.galadriel.com/tx/";
       setTxLink(`${baseTxLink}/${tx.hash}`)
     } catch (e) {
-      toast.error("TX FAILED :( ", toastProps);
+      toast.error("TX FAILED ", toastProps);
+      console.log(e, 'failed')
     } finally {
       setIsSending(false)
     }
-  }, [amount, fromToken, toToken, signer, fromBalance]);
+  }, [amount, signer, fromBalance]);
 
   return (
     <TaskLayout
@@ -140,7 +141,7 @@ export default function Bridge() {
       </Button>
 
       {txLink && (
-        <p className='text-lg text-gray-300'> <a href={txLink} target="_blank">Create Task Link</a></p>
+        <p className='text-lg text-gray-300'> <a href={txLink} target="_blank">Create Task Explorer</a></p>
       )}
     </TaskLayout>
   )
