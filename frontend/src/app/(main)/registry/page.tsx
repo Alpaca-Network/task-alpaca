@@ -113,7 +113,7 @@ export default function Bridge() {
 
       {task && (
         <div className="task-details mt-4 text-left text-gray-300">
-          <h2 className="text-xs font-medium">Agent address</h2>
+          <h2 className="text-xs font-medium">Current agent</h2>
           <p className="text-xs font-medium">{task}</p>
         </div>
       )}
