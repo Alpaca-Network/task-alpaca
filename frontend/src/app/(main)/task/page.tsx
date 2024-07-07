@@ -48,31 +48,11 @@ export default function Bridge() {
   const [amount, setAmount] = useState<string>('0');
   const [description, setDescription] = useState("");
 
-  useEffect(() => {
-    const getDerampBalance = async () => {
-      if (!address || !signer) {
-        toast.error("Error fetching balance on GAL", toastProps);
-        return;
-      }
-
-      const derampContract: any = galGaladrielContract;
-
-      try {
-        const bal = (await derampContract.connect(signer).balanceOf(address)) as bigint;
-        // console.log('balance on' + isChainBase ? 'base' : 'degen', bal.toString())
-        setFromBalance(bal)
-      } catch (err) {
-        toast.error('Failed fetching GAL balance', toastProps)
-      }
-    }
-
-    getDerampBalance()
-  }, [chainId, address, signer, fromBalance])
-
-  const handleBridge = useCallback(async () => {
+  const sendTransaction = useCallback(async () => {
     setIsSending(true)
     if (!balance) {
       toast.error("balance undefined")
+      setIsSending(false)
       return
     }
     if (!signer) {
@@ -80,21 +60,17 @@ export default function Bridge() {
       setIsSending(false)
       return
     }
+    console.log('sending')
 
-    if (!fromBalance) {
-      toast.error("Invalid balance", toastProps);
-      setIsSending(false)
-      return
-    }
+    const decimalAdjAmt = ethers.formatUnits(balance.value, 18)
 
-    const decimalAdjAmt = ethers.formatUnits(balance.value, TOKEN_DECIMALS)
+    const galContract: any = galGaladrielContract;
 
-
-    
-    const derampContract: any = galGaladrielContract;
+    console.log(decimalAdjAmt)
+    console.log(galContract)
 
     try {
-      const tx = (await derampContract.connect(signer).BridgeOut(decimalAdjAmt)) as ethers.TransactionResponse
+      const tx = (await galContract.connect(signer).BridgeOut(decimalAdjAmt)) as ethers.TransactionResponse
       let baseTxLink = "https://explorer.galadriel.com/";
       setTxLink(`${baseTxLink}/${tx.hash}`)
     } catch (e) {
@@ -159,7 +135,7 @@ export default function Bridge() {
         </div>
       </div>
 
-      <Button onClick={handleBridge} color="gray" className="mt-8 w-full">
+      <Button onClick={sendTransaction} color="gray" className="mt-8 w-full">
         {isSending ? "Creating Task..." : "Create Task"}
       </Button>
 
