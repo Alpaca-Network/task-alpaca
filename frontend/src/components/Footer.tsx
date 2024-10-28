@@ -52,7 +52,7 @@ export function Footer() {
           </div>
 
           <p className="mt-0 text-md text-gray-300 md:mt-0">
-            &copy;Task Llama {new Date().getFullYear()}. All rights reserved.
+            &copy;Task Alpaca {new Date().getFullYear()}. All rights reserved.
           </p>
         </div>
       </Container>
