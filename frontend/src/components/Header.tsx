@@ -40,7 +40,7 @@ export function Header() {
               <Logo className="h-10 w-auto mr-2" />
               <span className="ml-2" >
                 <h1 className="text-2xl font-medium tracking-tight text-gray-900">
-                  Task Llama
+                  Task Alpaca
                 </h1>
               </span> {/* Adjust margin as needed */}
             </Link>
