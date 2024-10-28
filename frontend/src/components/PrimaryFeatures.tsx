@@ -45,7 +45,7 @@ const features = [
   {
     name: 'Post and Manage Tasks',
     description:
-      'Task Llama allows users to post tasks and manage them efficiently, leveraging both AI models and human collaboration for optimal task completion.',
+      'Task Alpaca allows users to post tasks and manage them efficiently, leveraging both AI models and human collaboration for optimal task completion.',
     icon: DeviceTouchIcon,
     screen: InvestScreen,
   },
@@ -532,13 +532,13 @@ export function PrimaryFeatures() {
   return (
     <section
       id="features"
-      aria-label="Task Llama"
+      aria-label="Task Alpaca"
       className="bg-white py-20 sm:py-32"
     >
       <Container>
         <div className="mx-auto max-w-2xl lg:mx-0 lg:max-w-4xl">
           <h2 className="text-3xl font-medium tracking-tight text-black">
-            Task Llama V1
+            Task Alpaca V1
           </h2>
           <p className="mt-2 text-lg text-gray-200">
 
