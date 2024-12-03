@@ -90,7 +90,7 @@ export default function Bridge() {
     >
 
       <h1 className="text-center text-2xl font-medium tracking-tight text-gray-100">
-        Task Llama
+        Task Alpaca
       </h1>
 
       <p className="mt-3 text-center text-md text-gray-300 display-flex">
