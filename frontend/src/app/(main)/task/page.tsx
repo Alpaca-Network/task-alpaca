@@ -69,7 +69,7 @@ export default function Bridge() {
     console.log(decimalAdjAmt, agentAddress, evaluatorAddress, description)
 
     try {
-      console.log(description)
+    console.log(description)
       const tx = (await galGaladrielContract.createTask(description, agentAddress, evaluatorAddress, { value: decimalAdjAmt } )) as ethers.TransactionResponse
       console.log('trying')
       
@@ -79,10 +79,35 @@ export default function Bridge() {
       toast.error("TX FAILED ", toastProps);
       console.log(e, 'failed')
     } finally {
+
+      registerTask()
       setIsSending(false)
     }
   }, [amount, signer, description, fromBalance]);
 
+  const registerTask = async () => {
+    const url = "https://app.langtrace.ai/api/project";
+    const headers = {
+      "Content-Type": "application/json",
+      "x-api-key": process.env.NEXT_PUBLIC_LANGTRACE_TEAM_API_KEY!
+    };
+    
+    const payload = {
+      name: signer?.address,
+      description: "Budget: " + amount.toString() + "$GAL" + " Description: " + description,
+      teamId: process.env.NEXT_PUBLIC_LANGTRACE_TEAM_ID!,
+      createDefaultTests: true
+    };
+
+    fetch(url, {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(data => console.log(data))
+    .catch(error => console.error('Error:', error))
+  }
   return (
     <TaskLayout
       title=""
